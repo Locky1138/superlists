@@ -1,32 +1,45 @@
 from selenium import webdriver
-
-browser = webdriver.Firefox()
+import unittest
 
 # Lets practice some end-to-end user story writing!
+# now with 100% more unittest
 
-# Alice visits our site
-browser.get('http://localhost:8000')
+class NewVisitorTest(unittest.TestCase):
+    
+    def setUp(self):
+        self.browser = webdriver.Firefox()
 
-# she notices the page title and headder mention "To-Do" lists
-assert 'To-Do' in browser.title
+    def tearDown(self):
+        self.browser.quit()
 
-# she is invited to enter a to-do item immediately
+    def test_can_start_a_list_and_retrieve_it_later(self):
+        # Alice visits our site
+        self.browser.get('http://localhost:8000')
 
-# she types in "Follow the white rabbit" into a text box
+        # she notices the page title and headder mention "To-Do" lists
+        self.assertIn('To-Do', self.browser.title)
+        self.fail('Finish the test!')
 
-# when she hits 'Enter' the page updates, and now lists
-# "1: Follow the white rabbit" as an item in a to-do list
+        # she is invited to enter a to-do item immediately
 
-# there is still a text box inviting her to add another item
-#she enters "obey the testing goat"
+        # she types in "Follow the white rabbit" into a text box
 
-# the page updates again and now shows both items on her list
+        # when she hits 'Enter' the page updates, and now lists
+        # "1: Follow the white rabbit" as an item in a to-do list
 
-# Alice woners if the site will remember her list
-# she sees that the site has generated a unique URL for her
-# and there is some text explaining its use
+        # there is still a text box inviting her to add another item
+        # she enters "obey the testing goat"
 
-# she visits that URL and her list is there.
+        # the page updates again and now shows both items on her list
 
-# satisfied, she moves on to other adventures
-browser.quit()
+        # Alice woners if the site will remember her list
+        # she sees that the site has generated a unique URL for her
+        # and there is some text explaining its use
+
+        # she visits that URL and her list is there.
+
+        # satisfied, she moves on to other adventures
+
+if __name__ == '__main__':
+    unittest.main()
+
