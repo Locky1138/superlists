@@ -37,22 +37,30 @@ class NewVisitorTest(unittest.TestCase):
         # "1: Follow the white rabbit" as an item in a to-do list
         inputbox.send_keys(Keys.ENTER)
 
+        import time
+        time.sleep(10)
+
         table = self.browser.find_element_by_id('id_list_table')
         rows = table.find_elements_by_tag_name('tr')
-        self.assertTrue(
-            any(row.text == '1: Follow the white rabbit' for row in rows),
-            "New to-do item did not appear in table"
-        )
+        self.assertIn('1: Follow the white rabbit', [row.text for row in rows])
 
         # there is still a text box inviting her to add another item
         # she enters "obey the testing goat"
-        self.fail('Finish the test!')
+        inputbox = self.browser.find_element_by_id('id_new_item')
+        inputbox.send_keys('Obey the testing goat')
+        inputbox.send_keys(Keys.ENTER)
 
         # the page updates again and now shows both items on her list
+        table = self.browser.find_element_by_id('id_list_table')
+        rows = table.find_elements_by_tag_name('tr')
+
+        self.assertIn('1: Follow the white rabbit', [row.text for row in rows])
+        self.assertIn('2: Obey the testing goat', [row.text for row in rows])
 
         # Alice woners if the site will remember her list
         # she sees that the site has generated a unique URL for her
         # and there is some text explaining its use
+        self.fail('Finish the test!')
 
         # she visits that URL and her list is there.
 
