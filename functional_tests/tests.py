@@ -2,6 +2,8 @@ from django.test import LiveServerTestCase
 from selenium import webdriver
 from selenium.webdriver.common.keys import Keys
 
+import time
+
 # Lets practice some end-to-end user story writing!
 # now with 100% more LiveServerTestCase from django.test 
 
@@ -41,9 +43,10 @@ class NewVisitorTest(LiveServerTestCase):
         # when she hits 'Enter' the page updates, and now lists
         # "1: Follow the white rabbit" as an item in a to-do list
         inputbox.send_keys(Keys.ENTER)
+        alice_list_url = self.browser.current_url
+        self.assertRegex(alice_list_url, '/lists/.+')
 
-        import time
-        time.sleep(10)
+        time.sleep(5)
 
         self.check_for_row_in_list_table('1: Follow the white rabbit')
 
@@ -53,18 +56,43 @@ class NewVisitorTest(LiveServerTestCase):
         inputbox.send_keys('Obey the testing goat')
         inputbox.send_keys(Keys.ENTER)
 
+        time.sleep(5)
         # the page updates again and now shows both items on her list
 
         self.check_for_row_in_list_table('1: Follow the white rabbit')
         self.check_for_row_in_list_table('2: Obey the testing goat')
 
-        # Alice woners if the site will remember her list
-        # she sees that the site has generated a unique URL for her
-        # and there is some text explaining its use
-        self.fail('Finish the test!')
+        # Now a new user, Bob, comes along to the site.
 
-        # she visits that URL and her list is there.
+        ## We use a new browser session to make sure that no information of Alice's
+        ## is comming through our cookies, etc.
 
-        # satisfied, she moves on to other adventures
+        self.browser.quit()
+        self.browser = webdriver.Firefox()
+
+        # Bob visits the home page.
+        # there is no sign of Alice's list
+
+        self.browser.get(self.live_server_url)
+        page_text = self.browser.find_element_by_tag_name('body').text
+        self.assertNotIn('Follow the white rabbit', page_text)
+        self.assertNotIn('Ovey the testing goat', page_text)
+
+        # Bob starts a new list by entering a new item
+        inputbox = self.browser.find_element_by_id('id_new_item')
+        inputbox.send_keys('Buy milk')
+        inputbox.send_keys(Keys.ENTER)
+
+        # Bob gets his own unique URL
+        bob_list_url = self.browser.current_url
+        self.assertRegex(bob_list_url, '/lists/.+')
+        self.assertNotEqual(bob_list_url, alice_list_url)
+        
+        # Again there is no trace of Alice's List
+        page_text = self.browser.current_url
+        self.assertNotIn('Follow the white rabbit', page_text)
+        self.assertIn('Buy milk', page_text)
+
+        # satisfied, she moves on to other adventures, and he goes to bed
 
 
