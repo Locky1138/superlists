@@ -89,7 +89,8 @@ class NewVisitorTest(LiveServerTestCase):
         self.assertNotEqual(bob_list_url, alice_list_url)
         
         # Again there is no trace of Alice's List
-        page_text = self.browser.current_url
+        page_text = self.browser.find_element_by_tag_name('body').text
+        time.sleep(5)
         self.assertNotIn('Follow the white rabbit', page_text)
         self.assertIn('Buy milk', page_text)
 
