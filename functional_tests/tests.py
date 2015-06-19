@@ -21,6 +21,29 @@ class NewVisitorTest(LiveServerTestCase):
         rows = table.find_elements_by_tag_name('tr')
         self.assertIn(row_text, [row.text for row in rows])
 
+    def test_layout_and_styling(self):
+        # Alice goes to the home page
+        self.browser.get(self.live_server_url)
+        self.browser.set_window_size(1024, 768)
+
+        # She notices the input box is nicely centered
+        inputbox = self.browser.find_element_by_id('id_new_item')
+        self.assertAlmostEqual(
+            inputbox.location['x'] + inputbox.size['width'] / 2,
+            512,
+            delta=5
+        )
+
+        # She starts a new list and sees that the input is nicely centered there too
+        inputbox.send_keys('testing\n')
+        inputbox = self.browser.find_element_by_id('id_new_item')
+        self.assertAlmostEqual(
+            inputbox.location['x'] + inputbox.size['width'] / 2,
+            512,
+            delta=5
+        )
+
+
     def test_can_start_a_list_and_retrieve_it_later(self):
         # Alice visits our site
         self.browser.get(self.live_server_url)
@@ -46,7 +69,7 @@ class NewVisitorTest(LiveServerTestCase):
         alice_list_url = self.browser.current_url
         self.assertRegex(alice_list_url, '/lists/.+')
 
-        time.sleep(5)
+        time.sleep(1)
 
         self.check_for_row_in_list_table('1: Follow the white rabbit')
 
@@ -56,7 +79,7 @@ class NewVisitorTest(LiveServerTestCase):
         inputbox.send_keys('Obey the testing goat')
         inputbox.send_keys(Keys.ENTER)
 
-        time.sleep(5)
+        time.sleep(1)
         # the page updates again and now shows both items on her list
 
         self.check_for_row_in_list_table('1: Follow the white rabbit')
@@ -90,7 +113,7 @@ class NewVisitorTest(LiveServerTestCase):
         
         # Again there is no trace of Alice's List
         page_text = self.browser.find_element_by_tag_name('body').text
-        time.sleep(5)
+        time.sleep(1)
         self.assertNotIn('Follow the white rabbit', page_text)
         self.assertIn('Buy milk', page_text)
 
