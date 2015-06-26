@@ -15,3 +15,5 @@ Use environment from file:
 5. verify that the environemnt was installed correctly:
     conda list
 
+Server-Side Python Path:
+/home/site_user/miniconda3/envs/superlists/bin/python
