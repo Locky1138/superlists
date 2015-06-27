@@ -7,12 +7,13 @@ env.use_ssh_config = True
 REPO_URL = 'https://github.com/Locky1138/superlists.git'
 
 def deploy():
-    site_folder = '/home/%s/sites/%s' % (env.user, env.host)
+    home_folder = '/home/%s' % (env.user)
+    site_folder = home_folder + '/sites/%s' % env.host
     source_folder = site_folder + '/source'
     _create_directory_structure_if_necessary(site_folder)
     _get_latest_source(source_folder)
     _update_settings(source_folder, env.host)
-    _update_virtualenv(source_folder)
+    _update_virtualenv(home_folder, source_folder)
     _update_static_files(source_folder)
     _update_database(source_folder)
 
@@ -42,21 +43,21 @@ def _update_settings(source_folder, site_name):
         append(secret_key_file, "SECRET_KEY = '%s'" % (key,))
     append(settings_path, '\nfrom .secret_key import SECRET_KEY')
 
-def _update_virtualenv(source_folder):
+def _update_virtualenv(home_folder, source_folder):
     virtualenv_folder = source_folder + '/../virtualenv'
     if not exists('miniconda3/'):
         # Install miniconda3
         run('wget http://repo.continuum.io/miniconda/Miniconda3-latest-Linux-x86_64.sh -O miniconda3.sh')
-        run('bash miniconda3.sh -b')
+        run('miniconda3.sh -b')
     if not exists('miniconda3/envs/superlists/'):
         # create conda virtualenv
         with prefix('cd %s' % (source_folder,)):
-            run('$PWD/miniconda3/bin/conda env create')
+            run('%s/miniconda3/bin/conda env create -f=%s/environment.yml' % (home_folder, source_folder))
     if not exists(virtualenv_folder + '/bin/python'):
         # create symlink virtualenv > conda env
         # ln -s /home/locky/miniconda3/envs/superlists sites/staging.locky1138.com/virtualenv
-        run('ln -s $PWD/miniconda3/envs/superlists %s' % virtual_env_folder)
-    run('%s/bin/conda env update -e superlists -f %s/environment.yml' % (virtualenv_folder, source_folder))
+        run('ln -s %s/miniconda3/envs/superlists %s' % (home_folder, virtual_env_folder))
+    run('%s/miniconda3/bin/conda env update -n=superlists -f=%s/environment.yml' % (home_folder, source_folder))
 #    with prefix('cd %s && source activate superlists' % (source_folder,)):
 #        run('conda env update')
 

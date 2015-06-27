@@ -24,8 +24,4 @@ dependencies:
 - yaml=0.1.6=0
 - zlib=1.2.8=0
 - pip:
-  - ecdsa==0.13
-  - fabric==1.10.2
-  - paramiko==1.15.2
-  - pycrypto==2.6.1
   - selenium==2.46.0
