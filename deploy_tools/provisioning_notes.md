@@ -22,12 +22,13 @@ $ conda info
 * or do it manually
 $ wget http://repo.continuum.io/miniconda/Miniconda3-latest-Linux-x86_64.sh -O miniconda3.sh
 $ bash miniconda3.sh -b
-#in the same directory as the environment.yml file
+in the same directory as the environment.yml file
 $ conda env create
 $ conda list env
 
 * conda environment management
 conda env export -n ENVNAME -f environment.yml
+conda env update (update from environment.yml)
 
 source activate ENVNAME
 source deactivate ENVNAME
