@@ -74,8 +74,8 @@ class ListViewTest(TestCase):
 
         self.assertRedirects(response, '/lists/%d/' % (correct_list.id,))
 
-   def test_validation_errors_end_up_on_list_page(self):
-        list_ = List.objects.create 
+    def test_validation_errors_end_up_on_list_page(self):
+        list_ = List.objects.create() 
         response = self.client.post(
             '/lists/%d/' % (list_.id,), 
             data={'item_text': ''}
