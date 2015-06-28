@@ -57,9 +57,8 @@ def _update_virtualenv(home_folder, source_folder):
         # create symlink virtualenv > conda env
         # ln -s /home/locky/miniconda3/envs/superlists sites/staging.locky1138.com/virtualenv
         run('ln -s %s/miniconda3/envs/superlists %s' % (home_folder, virtual_env_folder))
-    run('%s/miniconda3/bin/conda env update -n=superlists -f=%s/environment.yml' % (home_folder, source_folder))
-#    with prefix('cd %s && source activate superlists' % (source_folder,)):
-#        run('conda env update')
+# unable to use conda env update, due to conda bugs
+#    run('%s/miniconda3/bin/conda env update -n=superlists -f=%s/environment.yml' % (home_folder, source_folder))
 
 def _update_static_files(source_folder):
     run('cd %s && ../virtualenv/bin/python3 manage.py collectstatic --noinput' % source_folder)
