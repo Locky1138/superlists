@@ -48,7 +48,7 @@ def _update_virtualenv(home_folder, source_folder):
     if not exists('miniconda3/'):
         # Install miniconda3
         run('wget http://repo.continuum.io/miniconda/Miniconda3-latest-Linux-x86_64.sh -O miniconda3.sh')
-        run('miniconda3.sh -b')
+        run('bash miniconda3.sh -b')
     if not exists('miniconda3/envs/superlists/'):
         # create conda virtualenv
         with prefix('cd %s' % (source_folder,)):
@@ -56,7 +56,7 @@ def _update_virtualenv(home_folder, source_folder):
     if not exists(virtualenv_folder + '/bin/python'):
         # create symlink virtualenv > conda env
         # ln -s /home/locky/miniconda3/envs/superlists sites/staging.locky1138.com/virtualenv
-        run('ln -s %s/miniconda3/envs/superlists %s' % (home_folder, virtual_env_folder))
+        run('ln -s %s/miniconda3/envs/superlists %s' % (home_folder, virtualenv_folder))
 # unable to use conda env update, due to conda bugs
 #    run('%s/miniconda3/bin/conda env update -n=superlists -f=%s/environment.yml' % (home_folder, source_folder))
 

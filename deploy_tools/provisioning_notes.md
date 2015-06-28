@@ -12,7 +12,7 @@ eg, on ubuntu:
 sudo apt-get install nginx git
 
 ## Miniconda install
-* try AWS AMI_ID iniconda3-3.9.1-on-ubuntu-14.04-lts mi-7c6b5314
+* try AWS AMI_ID miniconda3-3.9.1-on-ubuntu-14.04-lts ami-7c6b5314
 * or docker:
 $ docker search continuumio
 $ docker pull continuumio/miniconda
