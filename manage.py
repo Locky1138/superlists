@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/home/locky/miniconda3/bin/python
 import os
 import sys
 
