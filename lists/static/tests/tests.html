@@ -19,15 +19,16 @@
     <script src="../list.js"></script>
     <script>
 /*global $, test, equal */
-test("errors not hidden unless there is a keypress", function() {
-    equal($('.has-error').is(':visible'), true);
-});
+test("errors should be hidden on keypress", 
+    function () {
+        $('input').trigger('keypress');
+        equal($('.has-error').is(':visible'), false);
+    });
 
-test("errors should be hidden on keypress", function () {
-    $('input').trigger('keypress');
-    equal($('.has-error').is(':visible'), false);
-});
-
+test("errors not hidden unless there is a keypress",
+    function() {
+        equal($('.has-error').is(':visible'), true);
+    });
 
     </script>
 
